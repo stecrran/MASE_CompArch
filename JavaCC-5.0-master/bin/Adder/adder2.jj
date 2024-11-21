@@ -1,0 +1,83 @@
+options {
+    LOOKAHEAD = 1;
+}
+
+PARSER_BEGIN(Adder2)
+class Adder2 {
+    public static void main(String[] args) throws ParseException, TokenMgrError, NumberFormatException {
+        Adder2 parser = new Adder2(System.in);
+        parser.parseInput();
+    }
+
+    // Method to handle multi-line parsing
+    public void parseInput() throws ParseException {
+        while (true) {
+            int val = Line();
+            System.out.println(val);
+
+            // Stop if the next token is EOF
+            if (getToken(1).kind == 0) break;  // 0 represents EOF in JavaCC
+        }
+		System.out.println("Thank you for using the Parser");
+    }
+}
+PARSER_END(Adder2)
+
+SKIP: { " " }
+SKIP: { "\t" }
+SKIP: { "@" | "$" | "?" | "!" }
+
+TOKEN: { <PLUS: "+" | "plus"> }
+TOKEN: { <MINUS: "-" | "minus"> }
+TOKEN: { <MULTIPLY: "*" | "multiply"> }
+TOKEN: { <DIVIDE: "/" | "divide"> }
+TOKEN: { <NUM: (["0"-"9"])+> }
+TOKEN: { <EOL: "\n" | "\r" | "\r\n"> }
+
+// Define a Line production to ensure each line has an EOL or EOF
+int Line() throws ParseException, NumberFormatException :
+{
+    int result;
+}
+{
+    result = Start() (<EOL> | <EOF>) { return result; }
+}
+
+// Parse a single expression and allow for multiple operations in sequence
+int Start() throws ParseException, NumberFormatException :
+{
+    int value = 0;
+    int i;
+}
+{
+    value = Primary()
+    
+    (
+    <PLUS> 
+	i = Primary() 
+	{ value += i; }
+    |   
+	<MINUS> 
+	i = Primary() 
+	{ value -= i; }
+    |   
+	<MULTIPLY> 
+	i = Primary() 
+	{ value *= i; }
+    |   
+	<DIVIDE> 
+	i = Primary() 
+	{ value /= i; }
+    )*
+
+    { return value; }
+}
+
+// Define Primary production to handle NUM token and convert it to integer
+int Primary() throws ParseException :
+{
+    Token t;
+}
+{
+    t = <NUM> { return Integer.parseInt(t.image); }
+}

@@ -1,0 +1,37 @@
+
+PARSER_BEGIN(SimpleParser)
+
+/** Simple brace matcher. */
+public class Simple2 {
+
+  /** Main entry point. */
+  public static void main(String args[]) throws ParseException {
+    Simple2 parser = new Simple2(System.in);
+    parser.Input();
+  }
+
+}
+
+PARSER_END(Simple2)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+}
+
+/** Root production. */
+void Input() :
+{}
+{
+  MatchedBraces() <EOF>
+}
+
+/** Brace matching production. */
+void MatchedBraces() :
+{}
+{
+  "{" [ MatchedBraces() ] "}"
+}
