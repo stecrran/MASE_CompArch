@@ -1,0 +1,46 @@
+
+// Simple Parser for checking syntax for key-value pairs
+PARSER_BEGIN(SimpleParser)
+
+public class SimpleParser {
+    public static void main(String[] args) {
+        System.out.println("Enter key-value pairs (e.g., key1=value1, key2=value2):");
+        try {
+            SimpleParser parser = new SimpleParser(System.in);
+            parser.KeyValuePairs();  
+            System.out.println("Parsing completed successfully!");
+        } catch (ParseException e) {
+            System.err.println("Syntax error: " + e.getMessage());
+        }
+    }
+}
+
+PARSER_END(SimpleParser)
+
+// Skip whitespace and escape characters 
+SKIP : {
+    " " | "\t" | "\n" | "\r"
+}
+
+// Tokens for key-value pairs 
+TOKEN : {
+    < EQUALS: "=" > |
+    < COMMA: "," > |
+	< SEMICOLON: ";" > |
+    < IDENTIFIER: (["a"-"z", "A"-"Z", "_"]) (["a"-"z", "A"-"Z", "0"-"9", "_"])* > |
+    < VALUE: (["a"-"z", "A"-"Z", "0"-"9", "_", "-"])+ >
+}
+
+
+// Grammar rules
+void KeyValuePairs() :
+{}
+{
+    KeyValue() ( <COMMA> KeyValue() )* <SEMICOLON> // ',' if multiple(*) key-value. Enforces semi-colon at end
+}
+
+void KeyValue() :
+{}
+{
+    <IDENTIFIER> <EQUALS> <VALUE>
+}
