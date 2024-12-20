@@ -13,9 +13,7 @@ public interface SimpleParserConstants {
   /** RegularExpression Id. */
   int COMMA = 6;
   /** RegularExpression Id. */
-  int SEMICOLON = 7;
-  /** RegularExpression Id. */
-  int PROPERTY_OR_VALUE = 8;
+  int PROPERTY_OR_VALUE = 7;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -29,7 +27,6 @@ public interface SimpleParserConstants {
     "\"\\r\"",
     "\"=\"",
     "\",\"",
-    "\";\"",
     "<PROPERTY_OR_VALUE>",
   };
 

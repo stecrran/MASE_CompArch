@@ -1,0 +1,69 @@
+// Simple Parser for checking syntax for assignments and properties
+PARSER_BEGIN(SimpleParser)
+
+public class SimpleParser {
+    public static void main(String[] args) {
+        System.out.println("Enter assignments (e.g., property1=value1, property2=value2):");
+        try {
+            SimpleParser parser = new SimpleParser(System.in);
+            parser.AssignmentList();  
+            System.out.println("Parsing completed successfully!");
+
+        } catch (ParseException e) {
+            System.err.println("Syntax error: " + e.getMessage());
+        }
+    }
+}
+
+PARSER_END(SimpleParser)
+
+// Skip whitespace and escape characters
+SKIP : {
+    " " | "\t" | "\n" | "\r"
+}
+
+// Tokens for assignments and properties
+TOKEN : {
+    < EQUALS: "=" > |
+    < COMMA: "," > |
+    
+    // These tokens are used for both properties and their values
+    < PROPERTY_OR_VALUE: (["a"-"z", "A"-"Z", "0"-"9", "_", "-"])+ > 
+}
+
+/* Grammar rules */
+// Allows for multiple assignments using ','.
+void AssignmentList() :
+{ }
+{
+    Assignment() ( <COMMA> Assignment() )*
+
+}
+
+// Represents a single property assignment (e.g., property=value)
+void Assignment() :
+{ }
+{
+    Property() <EQUALS> Value()
+}
+
+// Property and Value methods to allow for distinction between properties and values
+void Property() :
+{ }
+{
+    <PROPERTY_OR_VALUE>
+    |
+    {
+        throw new ParseException("Missing key before '=' in key=value pair.");
+    }
+}
+
+void Value() :
+{ }
+{
+    <PROPERTY_OR_VALUE>
+    |
+    {
+        throw new ParseException("Missing value after '=' in key=value pair.");
+    }
+}

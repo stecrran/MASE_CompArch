@@ -26,45 +26,44 @@ SKIP : {
 TOKEN : {
     < EQUALS: "=" > |
     < COMMA: "," > |
-    < SEMICOLON: ";" > |
     
     // These tokens are used for both properties and their values
     < PROPERTY_OR_VALUE: (["a"-"z", "A"-"Z", "0"-"9", "_", "-"])+ > 
 }
 
-
 /* Grammar rules */
-// Allows for multiple assignments using ','. Enforces semicolon at end of line.
+// Allows for multiple assignments using ','.
 void AssignmentList() :
-{}
+{ }
 {
-    Assignment() ( <COMMA> Assignment() )* <SEMICOLON> 
+    Assignment() ( <COMMA> Assignment() )*
+
 }
 
 // Represents a single property assignment (e.g., property=value)
 void Assignment() :
-{}
+{ }
 {
     Property() <EQUALS> Value()
 }
 
 // Property and Value methods to allow for distinction between properties and values
 void Property() :
-{}
+{ }
 {
     <PROPERTY_OR_VALUE>
     |
     {
-        throw new ParseException("Missing property before '='");
+        throw new ParseException("Missing key before '=' in key=value pair.");
     }
 }
 
 void Value() :
-{}
+{ }
 {
     <PROPERTY_OR_VALUE>
-	|
+    |
     {
-        throw new ParseException("Missing value after '='");
+        throw new ParseException("Missing value after '=' in key=value pair.");
     }
 }

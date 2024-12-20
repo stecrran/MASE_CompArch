@@ -13,7 +13,7 @@ public class SimpleParser implements SimpleParserConstants {
     }
 
 /* Grammar rules */
-// Allows for multiple assignments using ','. Enforces semicolon at end of line.
+// Allows for multiple assignments using ','.
   static final public void AssignmentList() throws ParseException {
     Assignment();
     label_1:
@@ -29,7 +29,6 @@ public class SimpleParser implements SimpleParserConstants {
       jj_consume_token(COMMA);
       Assignment();
     }
-    jj_consume_token(SEMICOLON);
   }
 
 // Represents a single property assignment (e.g., property=value)
@@ -47,7 +46,7 @@ public class SimpleParser implements SimpleParserConstants {
       break;
     default:
       jj_la1[1] = jj_gen;
-        {if (true) throw new ParseException("Missing property before '='");}
+        {if (true) throw new ParseException("Missing key before '=' in key=value pair.");}
     }
   }
 
@@ -58,7 +57,7 @@ public class SimpleParser implements SimpleParserConstants {
       break;
     default:
       jj_la1[2] = jj_gen;
-        {if (true) throw new ParseException("Missing value after '='");}
+        {if (true) throw new ParseException("Missing value after '=' in key=value pair.");}
     }
   }
 
@@ -78,7 +77,7 @@ public class SimpleParser implements SimpleParserConstants {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x40,0x100,0x100,};
+      jj_la1_0 = new int[] {0x40,0x80,0x80,};
    }
 
   /** Constructor with InputStream. */
@@ -216,7 +215,7 @@ public class SimpleParser implements SimpleParserConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[9];
+    boolean[] la1tokens = new boolean[8];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -230,7 +229,7 @@ public class SimpleParser implements SimpleParserConstants {
         }
       }
     }
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 8; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
